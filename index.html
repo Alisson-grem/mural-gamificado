@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mural da Guilda - Missões</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- PORTÕES DA GUILDA (TELA DE APRESENTAÇÃO)   -->
+    <!-- ========================================== -->
+    <div id="telaApresentacao" class="landing-page">
+        <div class="landing-caixa">
+            <h1 class="landing-titulo">Taverna da Produtividade</h1>
+            <p class="landing-sub">Transforme suas tarefas chatas em missões épicas. Suba de nível, ganhe troféus e derrote a preguiça!</p>
+            
+            <div class="landing-recursos">
+                <div class="recurso">
+                    <span class="recurso-icone">⏱️</span>
+                    <h3>Modo Foco</h3>
+                    <p>Missões curtas ou longas com timer embutido.</p>
+                </div>
+                <div class="recurso">
+                    <span class="recurso-icone">👑</span>
+                    <h3>Missões Épicas</h3>
+                    <p>Progrida de 10% em 10% em tarefas gigantes.</p>
+                </div>
+                <div class="recurso">
+                    <span class="recurso-icone">🏅</span>
+                    <h3>Conquistas</h3>
+                    <p>Desbloqueie títulos secretos ao se superar.</p>
+                </div>
+            </div>
+
+            <button id="btnEntrar" class="btn-iniciar" onclick="abrirPortoes()">🗡️ Começar Jornada</button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MURAL DE MISSÕES (TELA PRINCIPAL DO APP)   -->
+    <!-- ========================================== -->
+    <div id="telaApp" class="mural escondido">
+        
+        <!-- Aviso de Level Up -->
+        <div id="modalLevelUp" class="modal escondido">
+            <div class="modal-caixa">
+                <h2>🎉 LEVEL UP! 🎉</h2>
+                <p>Seu poder aumentou! Você agora é Nível <span id="nivelModal"></span>.</p>
+                <button class="btn-fechar-modal" onclick="fecharModal('modalLevelUp')">Continuar a Caçada</button>
+            </div>
+        </div>
+
+        <!-- Aviso de Novo Título -->
+        <div id="modalTitulo" class="modal escondido">
+            <div class="modal-caixa caixa-titulo">
+                <h2>🏅 NOVO TÍTULO! 🏅</h2>
+                <h3 id="nomeTituloModal" class="titulo-destaque">O Relâmpago</h3>
+                <p id="descTituloModal">Você terminou a missão na velocidade da luz.</p>
+                <button class="btn-fechar-modal btn-ouro" onclick="fecharModal('modalTitulo')">Equipar Título</button>
+            </div>
+        </div>
+
+        <!-- O Baú Escondido (Modal do Pix) -->
+        <div id="modalPix" class="modal escondido">
+            <div class="modal-caixa caixa-pix">
+                <button class="btn-fechar-cruz" onclick="fecharModal('modalPix')">✖</button>
+                <h2 class="titulo-pix">Deixe sua Gorjeta</h2>
+                <p>Use a magia do seu banco para ler o pergaminho abaixo:</p>
+                
+                <!-- Área do QR Code (Substitua o src depois por um gerado com sua chave) -->
+                <div class="area-qr">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126440014br.gov.bcb.pix0122siteforgeagp@gmail.com5204000053039865802BR5924GOMESALISSON2023040801036009Sao Paulo610901227-20062230519daqr29883273086687363046F2D" alt="QR Code Pix" class="img-qr">
+                </div>
+
+                <p class="ou-texto">Ou copie a chave mágica:</p>
+                
+                <div class="area-copia">
+                    <input type="text" id="inputChavePix" value="siteforgeagp@gmail.com" readonly>
+                    <button id="btnCopiarPix" onclick="copiarChavePix()">Copiar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cabeçalho de Status -->
+        <div class="status-heroi">
+            <h1 id="textoNivel">Nível 1</h1>
+            <div class="xp-container">
+                <div class="xp-barra" id="barraXp"></div>
+                <div class="xp-texto" id="textoXp">0 / 100 XP</div>
+            </div>
+            
+            <!-- Sala de Troféus -->
+            <div class="sala-trofeus" id="areaTitulos">
+                <!-- Os títulos vão brilhar aqui -->
+            </div>
+        </div>
+
+        <!-- Entrada de Nova Missão -->
+        <div class="forja-missao">
+            <input type="text" id="inputMissao" placeholder="Descreva sua missão..." autocomplete="off">
+            <select id="selectRank">
+                <option value="d">Rank D</option>
+                <option value="c">Rank C</option>
+                <option value="b">Rank B</option>
+                <option value="a">Rank A</option>
+                <option value="s">Rank S</option>
+            </select>
+            <select id="selectTipo">
+                <option value="curto">⏱️ Tiro Rápido (15m)</option>
+                <option value="longo">⏳ Batalha Longa (45m)</option>
+                <option value="epica">👑 Missão Épica (100%)</option>
+            </select>
+            <button class="btn-adicionar" onclick="adicionarMissao()">CRIAR</button>
+        </div>
+
+        <!-- Lista de Missões Ativas -->
+        <h3>Missões Ativas</h3>
+        <ul class="lista-missoes" id="listaMissoes">
+            <!-- As missões ativas vão aparecer aqui -->
+        </ul>
+
+        <!-- Lista de Missões Concluídas -->
+        <h3 class="titulo-historico">Arquivo da Guilda (Concluídas)</h3>
+        <ul class="lista-missoes historico" id="listaConcluidas">
+            <!-- As missões finalizadas vêm para cá -->
+        </ul>
+
+        <!-- Botão Pix -->
+        <div class="area-pix-rodape">
+            <p>O Mural salvou sua guilda do caos e da preguiça?</p>
+            <button class="btn-pix" onclick="abrirModalPix()">
+                ☕ Pagar um Café pro Desenvolvedor
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
