@@ -1,11 +1,43 @@
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+// --- MAGIA PWA (INSTALAR APP) ---
+// Acorda o Service Worker nas sombras
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(() => {
+        console.log("Feitiço SW registrado!");
+    });
+}
+
+let promptDeInstalacao;
+const btnInstalar = document.getElementById('btnInstalarApp');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Impede o celular de mostrar o aviso feio dele
+    e.preventDefault();
+    promptDeInstalacao = e;
+    
+    // Só mostra o NOSSO botão furtivo se for tela pequena (Celular)
+    if (window.innerWidth <= 600) {
+        btnInstalar.classList.remove('escondido');
+    }
+});
+
+btnInstalar.addEventListener('click', async () => {
+    if (promptDeInstalacao) {
+        promptDeInstalacao.prompt();
+        const { outcome } = await promptDeInstalacao.userChoice;
+        if (outcome === 'accepted') {
+            btnInstalar.classList.add('escondido'); // O humano aceitou, a gente some!
+        }
+        promptDeInstalacao = null;
+    }
+});
+
 // --- BIBLIOTECA DE FEITIÇOS SONOROS ---
 function tocarSomMoeda() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator(); const ganho = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); 
+    osc.type = 'sine'; osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); 
     osc.frequency.exponentialRampToValueAtTime(1318.51, audioCtx.currentTime + 0.1); 
     ganho.gain.setValueAtTime(0, audioCtx.currentTime);
     ganho.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
@@ -17,8 +49,7 @@ function tocarSomMoeda() {
 function tocarSomLevelUp() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator(); const ganho = audioCtx.createGain();
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
+    osc.type = 'square'; osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
     osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.1); 
     osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.2); 
     osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.3); 
@@ -32,8 +63,7 @@ function tocarSomLevelUp() {
 function tocarSomTitulo() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator(); const ganho = audioCtx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
+    osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
     osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.15); 
     osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.3); 
     osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.45); 
@@ -47,8 +77,7 @@ function tocarSomTitulo() {
 function tocarSomPasso() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator(); const ganho = audioCtx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+    osc.type = 'triangle'; osc.frequency.setValueAtTime(300, audioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
     ganho.gain.setValueAtTime(0, audioCtx.currentTime);
     ganho.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
@@ -60,8 +89,7 @@ function tocarSomPasso() {
 function tocarSomAlarme() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator(); const ganho = audioCtx.createGain();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
     osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.1);
     osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.2);
     osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.3);
@@ -87,7 +115,7 @@ const todosOsTitulos = {
     't_ini': { icone: '🥉', nome: 'Batedor Iniciante', desc: 'Completou suas 3 primeiras missões!' },
     't_vet': { icone: '🏆', nome: 'Veterano Implacável', desc: 'Completou 10 missões com sucesso!' },
     't_speed': { icone: '⚡', nome: 'O Relâmpago', desc: 'Terminou uma missão correndo, com mais da metade do tempo sobrando!' },
-    't_clutch': { icone: '🗡️', nome: 'No Fio da Espada', desc: 'Emoção pura! Concluiu uma missão faltando 10 segundos ou menos.' },
+    't_clutch': { icone: '🗡️', nome: 'No Fio da Espada', desc: 'Emoção pura! Concluiu faltando 10s ou menos.' },
     't_epic': { icone: '👑', nome: 'Mestre Forjador', desc: 'Completou 100% de uma Missão Épica.' }
 };
 
@@ -164,7 +192,7 @@ function renderizarMissoes() {
                         </div>
                         <span class="texto-epica">👑 ${missao.progresso}% Concluído</span>
                     </div>`;
-                botaoAcao = `<button class="btn-completar btn-avancar" onclick="avancarEpica(${index})">+10% Forjar</button>`;
+                botaoAcao = `<button class="btn-completar btn-avancar" onclick="avancarEpica(${index})">+10%</button>`;
             }
 
             li.innerHTML = `
@@ -218,10 +246,7 @@ function adicionarMissao() {
     renderizarMissoes();
 }
 
-function removerMissao(index) {
-    missoes.splice(index, 1);
-    renderizarMissoes();
-}
+function removerMissao(index) { missoes.splice(index, 1); renderizarMissoes(); }
 
 function checarTitulos(missao) {
     let ganhouNovo = false;
@@ -236,28 +261,20 @@ function checarTitulos(missao) {
         if (missao.tempoRestante <= 10 && missao.tempoRestante > 0) ganhouNovo = desbloquearTitulo('t_clutch') || ganhouNovo;
     }
 
-    if (missao.tipo === 'epica' && missao.progresso === 100) {
-        ganhouNovo = desbloquearTitulo('t_epic') || ganhouNovo;
-    }
+    if (missao.tipo === 'epica' && missao.progresso === 100) ganhouNovo = desbloquearTitulo('t_epic') || ganhouNovo;
 
     localStorage.setItem('guildaStats', JSON.stringify(estatisticas));
     
-    if (!ganhouNovo) {
-        darXP(missao.rank);
-    } else {
-        xpAtual += recompensas[missao.rank];
-        checarLevelUpSilencioso();
-    }
+    if (!ganhouNovo) { darXP(missao.rank); } 
+    else { xpAtual += recompensas[missao.rank]; checarLevelUpSilencioso(); }
 }
 
 function desbloquearTitulo(id) {
     if (!titulosDesbloqueados.includes(id)) {
         titulosDesbloqueados.push(id);
         localStorage.setItem('guildaTitulos', JSON.stringify(titulosDesbloqueados));
-        
         document.getElementById('nomeTituloModal').innerText = `${todosOsTitulos[id].icone} ${todosOsTitulos[id].nome}`;
         document.getElementById('descTituloModal').innerText = todosOsTitulos[id].desc;
-        
         setTimeout(() => {
             tocarSomTitulo();
             document.getElementById('modalTitulo').classList.remove('escondido');
@@ -270,19 +287,16 @@ function desbloquearTitulo(id) {
 
 function checarLevelUpSilencioso() {
     if (xpAtual >= xpPorNivel) {
-        let sobras = xpAtual - xpPorNivel;
-        nivelAtual++; xpAtual = sobras;
+        let sobras = xpAtual - xpPorNivel; nivelAtual++; xpAtual = sobras;
         setTimeout(() => { mostrarModalLevelUp(); }, 3000); 
     }
     atualizarStatus();
 }
 
 function darXP(rank) {
-    tocarSomMoeda();
-    xpAtual += recompensas[rank];
+    tocarSomMoeda(); xpAtual += recompensas[rank];
     if (xpAtual >= xpPorNivel) {
-        let sobras = xpAtual - xpPorNivel;
-        nivelAtual++; xpAtual = sobras;
+        let sobras = xpAtual - xpPorNivel; nivelAtual++; xpAtual = sobras;
         mostrarModalLevelUp();
     }
     atualizarStatus();
@@ -291,27 +305,17 @@ function darXP(rank) {
 function concluirTarefa(index) {
     const missao = missoes[index];
     missao.rodando = false; missao.concluida = true;
-    checarTitulos(missao); 
-    renderizarMissoes();
+    checarTitulos(missao); renderizarMissoes();
 }
 
 function avancarEpica(index) {
-    tocarSomPasso();
-    missoes[index].progresso += 10;
-    if (missoes[index].progresso >= 100) {
-        missoes[index].progresso = 100;
-        concluirTarefa(index); 
-    } else {
-        renderizarMissoes();
-    }
+    tocarSomPasso(); missoes[index].progresso += 10;
+    if (missoes[index].progresso >= 100) { missoes[index].progresso = 100; concluirTarefa(index); } 
+    else { renderizarMissoes(); }
 }
 
-function alternarTimer(index) {
-    missoes[index].rodando = !missoes[index].rodando;
-    renderizarMissoes();
-}
+function alternarTimer(index) { missoes[index].rodando = !missoes[index].rodando; renderizarMissoes(); }
 
-// O Motor de Tempo
 setInterval(() => {
     let precisaSalvar = false;
     missoes.forEach((m, i) => {
@@ -319,59 +323,26 @@ setInterval(() => {
             m.tempoRestante--; precisaSalvar = true;
             const spanTempo = document.getElementById(`timer-${i}`);
             if(spanTempo) spanTempo.innerText = formatarTempo(m.tempoRestante);
-            
             if (m.tempoRestante <= 0) {
                 m.rodando = false; tocarSomAlarme();
-                alert(`O tempo da missão "${m.texto}" esgotou, aventureiro! Você falhou!`);
-                renderizarMissoes(); 
+                alert(`O tempo esgotou, aventureiro!`); renderizarMissoes(); 
             }
         }
     });
     if (precisaSalvar) localStorage.setItem('guildaMissoes', JSON.stringify(missoes));
 }, 1000);
 
-// --- MODAIS E PIX ---
-function mostrarModalLevelUp() {
-    document.getElementById('nivelModal').innerText = nivelAtual;
-    document.getElementById('modalLevelUp').classList.remove('escondido');
-    tocarSomLevelUp();
-}
-
-function fecharModal(idModal) { 
-    document.getElementById(idModal).classList.add('escondido'); 
-}
-
-function abrirModalPix() {
-    document.getElementById('modalPix').classList.remove('escondido');
-}
-
+function mostrarModalLevelUp() { document.getElementById('nivelModal').innerText = nivelAtual; document.getElementById('modalLevelUp').classList.remove('escondido'); tocarSomLevelUp(); }
+function fecharModal(idModal) { document.getElementById(idModal).classList.add('escondido'); }
+function abrirModalPix() { document.getElementById('modalPix').classList.remove('escondido'); }
 function copiarChavePix() {
-    const chaveInput = document.getElementById('inputChavePix');
+    const chave = document.getElementById('inputChavePix').value;
     const botao = document.getElementById('btnCopiarPix');
-    
-    // O Feitiço do Navegador para copiar!
-    navigator.clipboard.writeText(chaveInput.value).then(() => {
-        botao.innerText = "Copiado! ✔";
-        botao.style.backgroundColor = "#fff";
-        botao.style.color = "var(--cor-pix)";
-        
-        // Volta o botão ao normal depois de 2 segundos
-        setTimeout(() => {
-            botao.innerText = "Copiar";
-            botao.style.backgroundColor = "var(--cor-pix)";
-            botao.style.color = "#fff";
-        }, 2000);
-    }).catch(err => {
-        console.error('Falha ao usar o feitiço de cópia', err);
+    navigator.clipboard.writeText(chave).then(() => {
+        botao.innerText = "Copiado! ✔"; botao.style.backgroundColor = "#fff"; botao.style.color = "var(--cor-pix)";
+        setTimeout(() => { botao.innerText = "Copiar"; botao.style.backgroundColor = "var(--cor-pix)"; botao.style.color = "#fff"; }, 2000);
     });
 }
 
-// Iniciar Motor
-checarVitrine();
-atualizarStatus();
-renderizarMissoes();
-renderizarTitulos(); 
-
-document.getElementById('inputMissao').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') adicionarMissao();
-});
+checarVitrine(); atualizarStatus(); renderizarMissoes(); renderizarTitulos(); 
+document.getElementById('inputMissao').addEventListener('keypress', function (e) { if (e.key === 'Enter') adicionarMissao(); });

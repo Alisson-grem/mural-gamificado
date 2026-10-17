@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mural da Guilda - Missões</title>
+    
+    <!-- Magias de Aplicativo (PWA) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#fb8500">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ========================================== -->
-    <!-- PORTÕES DA GUILDA (TELA DE APRESENTAÇÃO)   -->
-    <!-- ========================================== -->
+    <!-- Botão Furtivo de Instalar App (Aparece só em celulares compatíveis) -->
+    <button id="btnInstalarApp" class="btn-instalar-app escondido">
+        📱 Instalar App da Guilda
+    </button>
+
+    <!-- PORTÕES DA GUILDA (TELA DE APRESENTAÇÃO) -->
     <div id="telaApresentacao" class="landing-page">
         <div class="landing-caixa">
             <h1 class="landing-titulo">Taverna da Produtividade</h1>
@@ -38,9 +45,7 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MURAL DE MISSÕES (TELA PRINCIPAL DO APP)   -->
-    <!-- ========================================== -->
+    <!-- MURAL DE MISSÕES (TELA PRINCIPAL DO APP) -->
     <div id="telaApp" class="mural escondido">
         
         <!-- Aviso de Level Up -->
@@ -68,16 +73,12 @@
                 <button class="btn-fechar-cruz" onclick="fecharModal('modalPix')">✖</button>
                 <h2 class="titulo-pix">Deixe sua Gorjeta</h2>
                 <p>Use a magia do seu banco para ler o pergaminho abaixo:</p>
-                
-                <!-- Área do QR Code (Substitua o src depois por um gerado com sua chave) -->
                 <div class="area-qr">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126440014br.gov.bcb.pix0122siteforgeagp@gmail.com5204000053039865802BR5924GOMESALISSON2023040801036009Sao Paulo610901227-20062230519daqr29883273086687363046F2D" alt="QR Code Pix" class="img-qr">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=COLOQUE-SUA-CHAVE-AQUI" alt="QR Code Pix" class="img-qr">
                 </div>
-
                 <p class="ou-texto">Ou copie a chave mágica:</p>
-                
                 <div class="area-copia">
-                    <input type="text" id="inputChavePix" value="siteforgeagp@gmail.com" readonly>
+                    <input type="text" id="inputChavePix" value="sua-chave-pix@email.com" readonly>
                     <button id="btnCopiarPix" onclick="copiarChavePix()">Copiar</button>
                 </div>
             </div>
@@ -92,9 +93,7 @@
             </div>
             
             <!-- Sala de Troféus -->
-            <div class="sala-trofeus" id="areaTitulos">
-                <!-- Os títulos vão brilhar aqui -->
-            </div>
+            <div class="sala-trofeus" id="areaTitulos"></div>
         </div>
 
         <!-- Entrada de Nova Missão -->
@@ -108,24 +107,20 @@
                 <option value="s">Rank S</option>
             </select>
             <select id="selectTipo">
-                <option value="curto">⏱️ Tiro Rápido (15m)</option>
-                <option value="longo">⏳ Batalha Longa (45m)</option>
-                <option value="epica">👑 Missão Épica (100%)</option>
+                <option value="curto">⏱️ Rápido (15m)</option>
+                <option value="longo">⏳ Longa (45m)</option>
+                <option value="epica">👑 Épica (100%)</option>
             </select>
-            <button class="btn-adicionar" onclick="adicionarMissao()">CRIAR</button>
+            <button class="btn-adicionar" onclick="adicionarMissao()">FORJAR</button>
         </div>
 
         <!-- Lista de Missões Ativas -->
         <h3>Missões Ativas</h3>
-        <ul class="lista-missoes" id="listaMissoes">
-            <!-- As missões ativas vão aparecer aqui -->
-        </ul>
+        <ul class="lista-missoes" id="listaMissoes"></ul>
 
         <!-- Lista de Missões Concluídas -->
         <h3 class="titulo-historico">Arquivo da Guilda (Concluídas)</h3>
-        <ul class="lista-missoes historico" id="listaConcluidas">
-            <!-- As missões finalizadas vêm para cá -->
-        </ul>
+        <ul class="lista-missoes historico" id="listaConcluidas"></ul>
 
         <!-- Botão Pix -->
         <div class="area-pix-rodape">
