@@ -7,126 +7,145 @@
     
     <!-- Magias de Aplicativo (PWA) -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#fb8500">
+    <meta name="theme-color" content="#b87333">
+    
+    <!-- Feitiços de Fontes Antigas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=VT323&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Botão Furtivo de Instalar App (Aparece só em celulares compatíveis) -->
-    <button id="btnInstalarApp" class="btn-instalar-app escondido">
-        📱 Instalar App da Guilda
+    <!-- Bandeiras de Idioma -->
+    <div class="seletor-idioma">
+        <button onclick="mudarIdioma('pt')" class="btn-bandeira" id="btnPt">🇧🇷 PT</button>
+        <button onclick="mudarIdioma('en')" class="btn-bandeira" id="btnEn">🇺🇸 EN</button>
+    </div>
+
+    <!-- Botão Furtivo de Instalar App -->
+    <button id="btnInstalarApp" class="btn-instalar-app escondido" data-i18n="btnInstalar">
+        📱 Forjar App no Cristal (Instalar)
     </button>
 
     <!-- PORTÕES DA GUILDA (TELA DE APRESENTAÇÃO) -->
     <div id="telaApresentacao" class="landing-page">
         <div class="landing-caixa">
-            <h1 class="landing-titulo">Taverna da Produtividade</h1>
-            <p class="landing-sub">Transforme suas tarefas chatas em missões épicas. Suba de nível, ganhe troféus e derrote a preguiça!</p>
+            <h1 class="landing-titulo" data-i18n="tituloTaverna">Taverna da Produtividade</h1>
+            <p class="landing-sub" data-i18n="subTaverna">Saque sua espada! Transforme tarefas chatas em missões épicas, ganhe XP e colete troféus!</p>
             
             <div class="landing-recursos">
                 <div class="recurso">
-                    <span class="recurso-icone">⏱️</span>
-                    <h3>Modo Foco</h3>
-                    <p>Missões curtas ou longas com timer embutido.</p>
+                    <span class="recurso-icone">⏳</span>
+                    <h3 data-i18n="recurso1Titulo">O Relógio</h3>
+                    <p data-i18n="recurso1Desc">Feitiços de tempo para missões curtas e longas.</p>
                 </div>
                 <div class="recurso">
                     <span class="recurso-icone">👑</span>
-                    <h3>Missões Épicas</h3>
-                    <p>Progrida de 10% em 10% em tarefas gigantes.</p>
+                    <h3 data-i18n="recurso2Titulo">A Jornada</h3>
+                    <p data-i18n="recurso2Desc">Destrua grandes projetos pedaço por pedaço.</p>
                 </div>
                 <div class="recurso">
                     <span class="recurso-icone">🏅</span>
-                    <h3>Conquistas</h3>
-                    <p>Desbloqueie títulos secretos ao se superar.</p>
+                    <h3 data-i18n="recurso3Titulo">A Glória</h3>
+                    <p data-i18n="recurso3Desc">Colete títulos brilhantes para sua armadura.</p>
                 </div>
             </div>
 
-            <button id="btnEntrar" class="btn-iniciar" onclick="abrirPortoes()">🗡️ Começar Jornada</button>
+            <button id="btnEntrar" class="btn-rpg-mestre" onclick="abrirPortoes()" data-i18n="btnAbrirPortoes">🗡️ Abrir os Portões</button>
         </div>
     </div>
 
     <!-- MURAL DE MISSÕES (TELA PRINCIPAL DO APP) -->
     <div id="telaApp" class="mural escondido">
         
+        <!-- O Bardo -->
+        <div class="controle-bardo">
+            <button id="btnBardo" class="btn-bardo" onclick="alternarMusica()">🎵 <span data-i18n="bardoTocando">Bardo: Tocando</span></button>
+        </div>
+        
         <!-- Aviso de Level Up -->
         <div id="modalLevelUp" class="modal escondido">
             <div class="modal-caixa">
                 <h2>🎉 LEVEL UP! 🎉</h2>
-                <p>Seu poder aumentou! Você agora é Nível <span id="nivelModal"></span>.</p>
-                <button class="btn-fechar-modal" onclick="fecharModal('modalLevelUp')">Continuar a Caçada</button>
+                <p><span data-i18n="lvlUpDesc">Seu poder mágico aumentou! Você agora é Nível</span> <span id="nivelModal"></span>.</p>
+                <button class="btn-rpg-mestre" onclick="fecharModal('modalLevelUp')" data-i18n="btnContinuarCacada">Continuar a Caçada</button>
             </div>
         </div>
 
         <!-- Aviso de Novo Título -->
         <div id="modalTitulo" class="modal escondido">
             <div class="modal-caixa caixa-titulo">
-                <h2>🏅 NOVO TÍTULO! 🏅</h2>
+                <h2 data-i18n="novoTitulo">🏅 NOVO TÍTULO! 🏅</h2>
                 <h3 id="nomeTituloModal" class="titulo-destaque">O Relâmpago</h3>
                 <p id="descTituloModal">Você terminou a missão na velocidade da luz.</p>
-                <button class="btn-fechar-modal btn-ouro" onclick="fecharModal('modalTitulo')">Equipar Título</button>
+                <button class="btn-rpg-mestre" onclick="fecharModal('modalTitulo')" data-i18n="btnEquiparTitulo">Equipar Título</button>
             </div>
         </div>
 
-        <!-- O Baú Escondido (Modal do Pix) -->
-        <div id="modalPix" class="modal escondido">
+        <!-- O Baú Inteligente (Doações) -->
+        <div id="modalDoacao" class="modal escondido">
             <div class="modal-caixa caixa-pix">
-                <button class="btn-fechar-cruz" onclick="fecharModal('modalPix')">✖</button>
-                <h2 class="titulo-pix">Deixe sua Gorjeta</h2>
-                <p>Use a magia do seu banco para ler o pergaminho abaixo:</p>
-                <div class="area-qr">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126440014br.gov.bcb.pix0122siteforgeagp@gmail.com5204000053039865802BR5924GOMESALISSON2023040801036009Sao Paulo610901227-20062340530daqr298832730179227916562684776304FEF9" alt="QR Code Pix" class="img-qr">
+                <button class="btn-fechar-cruz" onclick="fecharModal('modalDoacao')">✖</button>
+                <h2 class="titulo-pix" data-i18n="tituloBau">Baú do Ferreiro</h2>
+                
+                <!-- Sessão BR (PIX) -->
+                <div id="conteudoPix">
+                    <p data-i18n="descPix">Jogue uma moeda de ouro usando o feitiço do banco:</p>
+                    <div class="area-qr">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126440014br.gov.bcb.pix0122siteforgeagp@gmail.com5204000053039865802BR5910SITEFORGER6009Sao Paulo610901227-20062350531daqr37805573181792507998929594663045175" alt="QR Code Pix" class="img-qr">
+                    </div>
+                    <p class="ou-texto" data-i18n="ouCopie">Ou copie as runas antigas:</p>
+                    <div class="area-copia">
+                        <input type="text" id="inputChavePix" value="siteforgeagp@email.com" readonly>
+                        <button id="btnCopiarPix" class="btn-rpg-padrao" onclick="copiarChavePix()" data-i18n="btnCopiarPix">Copiar Runas</button>
+                    </div>
                 </div>
-                <p class="ou-texto">Ou copie a chave mágica:</p>
-                <div class="area-copia">
-                    <input type="text" id="inputChavePix" value="siteforgeagp@gmail.com" readonly>
-                    <button id="btnCopiarPix" onclick="copiarChavePix()">Copiar</button>
+
+                <!-- Sessão Gringa (BMAC e Ko-fi) -->
+                <div id="conteudoInternacional" class="escondido">
+                    <p data-i18n="descInternacional">Throw a gold coin using the merchant's portals:</p>
+                    <div class="area-botoes-gringos">
+                        <!-- Substitua os links abaixo pelos seus quando criar as contas -->
+                        <a href="https://buymeacoffee.com/siteforger" target="_blank" class="btn-bmac">☕ Buy Me a Coffee</a>
+                        <a href="https://ko-fi.com/siteforgermurasaki" target="_blank" class="btn-kofi">❤️ Support on Ko-fi</a>
+                    </div>
                 </div>
+
             </div>
         </div>
 
         <!-- Cabeçalho de Status -->
         <div class="status-heroi">
-            <h1 id="textoNivel">Nível 1</h1>
+            <h1><span data-i18n="textoNivel">Nível</span> <span id="textoNivelNum">1</span></h1>
             <div class="xp-container">
                 <div class="xp-barra" id="barraXp"></div>
                 <div class="xp-texto" id="textoXp">0 / 100 XP</div>
             </div>
-            
-            <!-- Sala de Troféus -->
             <div class="sala-trofeus" id="areaTitulos"></div>
         </div>
 
         <!-- Entrada de Nova Missão -->
         <div class="forja-missao">
-            <input type="text" id="inputMissao" placeholder="Descreva sua missão..." autocomplete="off">
-            <select id="selectRank">
-                <option value="d">Rank D</option>
-                <option value="c">Rank C</option>
-                <option value="b">Rank B</option>
-                <option value="a">Rank A</option>
-                <option value="s">Rank S</option>
-            </select>
-            <select id="selectTipo">
-                <option value="curto">⏱️ Rápido (15m)</option>
-                <option value="longo">⏳ Longa (45m)</option>
-                <option value="epica">👑 Épica (100%)</option>
-            </select>
-            <button class="btn-adicionar" onclick="adicionarMissao()">FORJAR</button>
+            <input type="text" id="inputMissao" placeholder="Qual será sua próxima caçada?..." autocomplete="off">
+            <select id="selectRank" class="select-rpg"></select>
+            <select id="selectTipo" class="select-rpg"></select>
+            <button class="btn-rpg-mestre btn-forjar" onclick="adicionarMissao()" data-i18n="btnForjarMissao">FORJAR MISSÃO</button>
         </div>
 
-        <!-- Lista de Missões Ativas -->
-        <h3>Missões Ativas</h3>
+        <!-- Lista de Missões -->
+        <h3 class="titulo-secao" data-i18n="tituloAbertos">🗡️ Pergaminhos Abertos</h3>
         <ul class="lista-missoes" id="listaMissoes"></ul>
 
-        <!-- Lista de Missões Concluídas -->
-        <h3 class="titulo-historico">Arquivo da Guilda (Concluídas)</h3>
+        <h3 class="titulo-secao titulo-historico" data-i18n="tituloConcluidas">📜 Túmulo das Missões (Concluídas)</h3>
         <ul class="lista-missoes historico" id="listaConcluidas"></ul>
 
-        <!-- Botão Pix -->
+        <!-- Botão Doação -->
         <div class="area-pix-rodape">
-            <p>O Mural salvou sua guilda do caos e da preguiça?</p>
-            <button class="btn-pix" onclick="abrirModalPix()">
-                ☕ Pagar um Café pro Desenvolvedor
+            <p data-i18n="textoDoacaoRodape">Os feitiços desta taverna lhe foram úteis?</p>
+            <button class="btn-pix-rpg" onclick="abrirModalDoacao()" data-i18n="btnDoacaoRodape">
+                💰 Jogar Moedas no Baú do Desenvolvedor
             </button>
         </div>
     </div>
