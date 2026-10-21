@@ -2,18 +2,18 @@
   "name": "Mural da Guilda",
   "short_name": "Guilda",
   "description": "Transforme tarefas em missões épicas.",
-  "start_url": "index.html",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#0a0a0c",
-  "theme_color": "#fb8500",
+  "background_color": "#0d0906",
+  "theme_color": "#b87333",
   "icons": [
     {
-      "src": "icone.png",
+      "src": "./icone.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icone.png",
+      "src": "./icone.png",
       "sizes": "512x512",
       "type": "image/png"
     }

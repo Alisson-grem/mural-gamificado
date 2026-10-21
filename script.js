@@ -144,11 +144,29 @@ function alternarMusica() {
     }
 }
 
-// --- MAGIA PWA (INSTALAR APP) ---
-if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+// --- MAGIA PWA (INSTALAR APP - Corrigido para GitHub Pages) ---
+if ('serviceWorker' in navigator) { 
+    // Aponta com ./ para não se perder nas pastas do GitHub Pages!
+    navigator.serviceWorker.register('./sw.js').then(() => {
+        console.log("Feitiço Service Worker registrado com sucesso!");
+    }).catch((err) => {
+        console.error("Falha no Service Worker! O Github Pages bloqueou?", err);
+    }); 
+}
+
 let promptDeInstalacao; const btnInstalar = document.getElementById('btnInstalarApp');
-window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); promptDeInstalacao = e; if (window.innerWidth <= 600) { btnInstalar.classList.remove('escondido'); } });
-btnInstalar.addEventListener('click', async () => { if (promptDeInstalacao) { promptDeInstalacao.prompt(); const { outcome } = await promptDeInstalacao.userChoice; if (outcome === 'accepted') { btnInstalar.classList.add('escondido'); } promptDeInstalacao = null; } });
+window.addEventListener('beforeinstallprompt', (e) => { 
+    e.preventDefault(); promptDeInstalacao = e; 
+    if (window.innerWidth <= 600) { btnInstalar.classList.remove('escondido'); } 
+});
+btnInstalar.addEventListener('click', async () => { 
+    if (promptDeInstalacao) { 
+        promptDeInstalacao.prompt(); 
+        const { outcome } = await promptDeInstalacao.userChoice; 
+        if (outcome === 'accepted') { btnInstalar.classList.add('escondido'); } 
+        promptDeInstalacao = null; 
+    } 
+});
 
 // --- FEITIÇOS SONOROS MÁGICOS (Sintetizador) ---
 function tocarSomMoeda() {
