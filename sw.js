@@ -1,8 +1,11 @@
-// O Service Worker da Sipah
 self.addEventListener('install', (e) => {
-    console.log('Feitiço do App instalado nas sombras!');
+    self.skipWaiting(); // Força o fantasma a acordar na hora!
 });
 
 self.addEventListener('fetch', (e) => {
-    // Deixa a internet fluir normalmente
+    e.respondWith(
+        fetch(e.request).catch(() => {
+            return new Response("O pergaminho não pode ser lido. O aventureiro está sem internet!");
+        })
+    );
 });
