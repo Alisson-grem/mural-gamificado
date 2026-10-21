@@ -104,7 +104,7 @@ function mudarIdioma(novoIdioma) {
 // BARDO E ÁUDIO
 // ==========================================
 const sfxTaverna = new Audio('./Musica/774883__destructo20__background-music-of-uncertainty.wav'); sfxTaverna.loop = true; sfxTaverna.volume = 0.4; 
-const sfxCliqueUI = new Audio('/Musica/547414__ian_g__wood-hit.wav'); sfxCliqueUI.volume = 0.5;
+const sfxCliqueUI = new Audio('./Musica/547414__ian_g__wood-hit.wav'); sfxCliqueUI.volume = 0.5;
 const sfxEspada = new Audio('./Musica/448009__kneeling__cleaver.mp3'); sfxEspada.volume = 0.6;
 
 document.addEventListener('click', (e) => {
@@ -127,7 +127,7 @@ function alternarMusica() {
     }
 }
 
-// --- MAGIA PWA (INSTALAR APP - Corrigido para GitHub Pages) ---
+// --- MAGIA PWA (INSTALAR APP - Com trava Mobile) ---
 if ('serviceWorker' in navigator) { 
     navigator.serviceWorker.register('./sw.js').then(() => {
         console.log("Feitiço Service Worker registrado com sucesso!");
@@ -137,7 +137,10 @@ if ('serviceWorker' in navigator) {
 let promptDeInstalacao; const btnInstalar = document.getElementById('btnInstalarApp');
 window.addEventListener('beforeinstallprompt', (e) => { 
     e.preventDefault(); promptDeInstalacao = e; 
-    btnInstalar.classList.remove('escondido'); 
+    // Segurança do Javascript: Só tira o invisível se a tela for menor que 600px!
+    if (window.innerWidth <= 600) {
+        btnInstalar.classList.remove('escondido'); 
+    }
 });
 btnInstalar.addEventListener('click', async () => { 
     if (promptDeInstalacao) { 
