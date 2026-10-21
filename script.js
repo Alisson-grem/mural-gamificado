@@ -1,8 +1,5 @@
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// ==========================================
-// A MAGIA DO POLIGLOTA (TRADUÇÃO)
-// ==========================================
 let idioma = localStorage.getItem('guildaIdioma') || 'pt';
 
 const dicionario = {
@@ -13,7 +10,7 @@ const dicionario = {
         recurso2Titulo: "A Jornada", recurso2Desc: "Destrua grandes projetos pedaço por pedaço.",
         recurso3Titulo: "A Glória", recurso3Desc: "Colete títulos brilhantes para sua armadura.",
         btnAbrirPortoes: "🗡️ Abrir os Portões",
-        btnInstalar: "📱 Forjar App no Cristal (Instalar)",
+        btnInstalar: "📱 Instalar App",
         bardoTocando: "Bardo: Tocando", bardoPausado: "Bardo: Pausado",
         lvlUpDesc: "Seu poder mágico aumentou! Você agora é Nível",
         btnContinuarCacada: "Continuar a Caçada",
@@ -21,7 +18,7 @@ const dicionario = {
         tituloBau: "Baú do Ferreiro",
         descPix: "Jogue uma moeda de ouro usando o feitiço do banco:",
         ouCopie: "Ou copie as runas antigas:", btnCopiarPix: "Copiar Runas", copiadoSucesso: "Runas Copiadas! ✔",
-        descInternacional: "Throw a gold coin using the merchant's portals:", /* Sempre em inglês */
+        descInternacional: "Throw a gold coin using the merchant's portals:",
         textoNivel: "Nível",
         placeholderMissao: "Qual será sua próxima caçada?...", btnForjarMissao: "FORJAR MISSÃO",
         tituloAbertos: "🗡️ Pergaminhos Abertos", tituloConcluidas: "📜 Túmulo das Missões (Concluídas)",
@@ -46,7 +43,7 @@ const dicionario = {
         recurso2Titulo: "The Journey", recurso2Desc: "Destroy massive projects piece by piece.",
         recurso3Titulo: "The Glory", recurso3Desc: "Collect shiny titles for your armor.",
         btnAbrirPortoes: "🗡️ Open the Gates",
-        btnInstalar: "📱 Forge App in Crystal (Install)",
+        btnInstalar: "📱 Install App",
         bardoTocando: "Bard: Playing", bardoPausado: "Bard: Paused",
         lvlUpDesc: "Your magic power increased! You are now Level",
         btnContinuarCacada: "Continue the Hunt",
@@ -85,32 +82,18 @@ function aplicarTraducoes() {
     document.getElementById('inputMissao').placeholder = t.placeholderMissao;
     
     const selRank = document.getElementById('selectRank');
-    selRank.innerHTML = `
-        <option value="d">${t.ranks['d']}</option>
-        <option value="c">${t.ranks['c']}</option>
-        <option value="b">${t.ranks['b']}</option>
-        <option value="a">${t.ranks['a']}</option>
-        <option value="s">${t.ranks['s']}</option>`;
+    selRank.innerHTML = `<option value="d">${t.ranks['d']}</option><option value="c">${t.ranks['c']}</option><option value="b">${t.ranks['b']}</option><option value="a">${t.ranks['a']}</option><option value="s">${t.ranks['s']}</option>`;
         
     const selTipo = document.getElementById('selectTipo');
-    selTipo.innerHTML = `
-        <option value="curto">${t.tipos['curto']}</option>
-        <option value="longo">${t.tipos['longo']}</option>
-        <option value="epica">${t.tipos['epica']}</option>`;
+    selTipo.innerHTML = `<option value="curto">${t.tipos['curto']}</option><option value="longo">${t.tipos['longo']}</option><option value="epica">${t.tipos['epica']}</option>`;
 
     document.getElementById('btnPt').classList.toggle('ativo', idioma === 'pt');
     document.getElementById('btnEn').classList.toggle('ativo', idioma === 'en');
     
-    // Troca a cor do botão de rodapé se for gringo!
     const btnDoacao = document.querySelector('.area-pix-rodape .btn-pix-rpg');
-    if (idioma === 'en') {
-        btnDoacao.classList.add('btn-inter-rpg');
-    } else {
-        btnDoacao.classList.remove('btn-inter-rpg');
-    }
+    if (idioma === 'en') { btnDoacao.classList.add('btn-inter-rpg'); } else { btnDoacao.classList.remove('btn-inter-rpg'); }
 
-    renderizarMissoes();
-    renderizarTitulos();
+    renderizarMissoes(); renderizarTitulos();
 }
 
 function mudarIdioma(novoIdioma) {
@@ -121,7 +104,7 @@ function mudarIdioma(novoIdioma) {
 // BARDO E ÁUDIO
 // ==========================================
 const sfxTaverna = new Audio('./Musica/774883__destructo20__background-music-of-uncertainty.wav'); sfxTaverna.loop = true; sfxTaverna.volume = 0.4; 
-const sfxCliqueUI = new Audio('./Musica/547414__ian_g__wood-hit.wav'); sfxCliqueUI.volume = 0.5;
+const sfxCliqueUI = new Audio('/Musica/547414__ian_g__wood-hit.wav'); sfxCliqueUI.volume = 0.5;
 const sfxEspada = new Audio('./Musica/448009__kneeling__cleaver.mp3'); sfxEspada.volume = 0.6;
 
 document.addEventListener('click', (e) => {
@@ -146,18 +129,15 @@ function alternarMusica() {
 
 // --- MAGIA PWA (INSTALAR APP - Corrigido para GitHub Pages) ---
 if ('serviceWorker' in navigator) { 
-    // Aponta com ./ para não se perder nas pastas do GitHub Pages!
     navigator.serviceWorker.register('./sw.js').then(() => {
         console.log("Feitiço Service Worker registrado com sucesso!");
-    }).catch((err) => {
-        console.error("Falha no Service Worker! O Github Pages bloqueou?", err);
-    }); 
+    }).catch((err) => { console.error("Falha no Service Worker", err); }); 
 }
 
 let promptDeInstalacao; const btnInstalar = document.getElementById('btnInstalarApp');
 window.addEventListener('beforeinstallprompt', (e) => { 
     e.preventDefault(); promptDeInstalacao = e; 
-    if (window.innerWidth <= 600) { btnInstalar.classList.remove('escondido'); } 
+    btnInstalar.classList.remove('escondido'); 
 });
 btnInstalar.addEventListener('click', async () => { 
     if (promptDeInstalacao) { 
@@ -215,7 +195,6 @@ let titulosDesbloqueados = JSON.parse(localStorage.getItem('guildaTitulos')) || 
 const xpPorNivel = 100;
 const recompensas = { 'd': 10, 'c': 20, 'b': 40, 'a': 70, 's': 100 };
 
-// --- CONTROLE DA TELA ---
 function checarVitrine() {
     const btnEntrar = document.getElementById('btnEntrar');
     if (nivelAtual > 1 || xpAtual > 0 || missoes.length > 0 || estatisticas.totalCompletas > 0) {
@@ -225,238 +204,104 @@ function checarVitrine() {
 function abrirPortoes() {
     document.getElementById('telaApresentacao').classList.add('escondido');
     document.getElementById('telaApp').classList.remove('escondido');
-    sfxEspada.play().catch(() => {});
-    sfxTaverna.play().catch(() => {});
+    sfxEspada.play().catch(() => {}); sfxTaverna.play().catch(() => {});
 }
-
 function atualizarStatus() {
     document.getElementById('textoNivelNum').innerText = nivelAtual;
     document.getElementById('textoXp').innerText = `${xpAtual} / ${xpPorNivel} XP`;
     let porcentagem = (xpAtual / xpPorNivel) * 100;
     document.getElementById('barraXp').style.width = `${porcentagem}%`;
-    localStorage.setItem('guildaXp', xpAtual);
-    localStorage.setItem('guildaNivel', nivelAtual);
+    localStorage.setItem('guildaXp', xpAtual); localStorage.setItem('guildaNivel', nivelAtual);
 }
-
 function renderizarTitulos() {
     const t = dicionario[idioma].titulos;
-    const area = document.getElementById('areaTitulos');
-    area.innerHTML = '';
+    const area = document.getElementById('areaTitulos'); area.innerHTML = '';
     titulosDesbloqueados.forEach(id => {
         if(t[id]) {
-            const span = document.createElement('span');
-            span.className = 'badge-titulo';
-            span.title = t[id].desc; 
-            span.innerText = `${t[id].icone} ${t[id].nome}`;
+            const span = document.createElement('span'); span.className = 'badge-titulo';
+            span.title = t[id].desc; span.innerText = `${t[id].icone} ${t[id].nome}`;
             area.appendChild(span);
         }
     });
 }
-
 function formatarTempo(segs) {
-    let m = Math.floor(segs / 60); let s = segs % 60;
-    return `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+    let m = Math.floor(segs / 60); let s = segs % 60; return `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
 }
-
 function renderizarMissoes() {
     const t = dicionario[idioma];
-    const listaAtivas = document.getElementById('listaMissoes');
-    const listaConcluidas = document.getElementById('listaConcluidas');
+    const listaAtivas = document.getElementById('listaMissoes'); const listaConcluidas = document.getElementById('listaConcluidas');
     listaAtivas.innerHTML = ''; listaConcluidas.innerHTML = '';
     
     missoes.forEach((missao, index) => {
-        const li = document.createElement('li');
-        li.className = `missao rank-${missao.rank}`;
-        
+        const li = document.createElement('li'); li.className = `missao rank-${missao.rank}`;
         if(!missao.concluida) {
             let htmlMeio = ''; let botaoAcao = '';
-
             if (missao.tipo === 'curto' || missao.tipo === 'longo') {
-                htmlMeio = `
-                    <div class="display-timer">
-                        <span id="timer-${index}">${formatarTempo(missao.tempoRestante)}</span>
-                        <button class="btn-play" onclick="alternarTimer(${index})" id="btn-play-${index}">
-                            ${missao.rodando ? '⏸' : '▶'}
-                        </button>
-                    </div>`;
+                htmlMeio = `<div class="display-timer"><span id="timer-${index}">${formatarTempo(missao.tempoRestante)}</span><button class="btn-play" onclick="alternarTimer(${index})" id="btn-play-${index}">${missao.rodando ? '⏸' : '▶'}</button></div>`;
                 botaoAcao = `<button class="btn-completar" onclick="concluirTarefa(${index})">${t.txtConcluir}</button>`;
             } else if (missao.tipo === 'epica') {
-                htmlMeio = `
-                    <div class="container-epica">
-                        <div class="barra-fundo-epica">
-                            <div class="barra-fill-epica" style="width: ${missao.progresso}%"></div>
-                        </div>
-                        <span class="texto-epica">👑 ${missao.progresso}% ${t.txtForjado}</span>
-                    </div>`;
+                htmlMeio = `<div class="container-epica"><div class="barra-fundo-epica"><div class="barra-fill-epica" style="width: ${missao.progresso}%"></div></div><span class="texto-epica">👑 ${missao.progresso}% ${t.txtForjado}</span></div>`;
                 botaoAcao = `<button class="btn-avancar" onclick="avancarEpica(${index})">${t.txtMartelar}</button>`;
             }
-
-            li.innerHTML = `
-                <div class="missao-info">
-                    <div class="missao-topo">
-                        <span class="missao-titulo">${missao.texto}</span>
-                        <span class="missao-rank">${t.ranks[missao.rank]} - ${recompensas[missao.rank]} XP</span>
-                    </div>
-                    ${missao.tipo === 'epica' ? htmlMeio : ''}
-                </div>
-                ${missao.tipo !== 'epica' ? htmlMeio : ''}
-                <div class="botoes-acao">
-                    ${botaoAcao}
-                    <button class="btn-excluir" onclick="removerMissao(${index})">${t.txtAbandonar}</button>
-                </div>`;
+            li.innerHTML = `<div class="missao-info"><div class="missao-topo"><span class="missao-titulo">${missao.texto}</span><span class="missao-rank">${t.ranks[missao.rank]} - ${recompensas[missao.rank]} XP</span></div>${missao.tipo === 'epica' ? htmlMeio : ''}</div>${missao.tipo !== 'epica' ? htmlMeio : ''}<div class="botoes-acao">${botaoAcao}<button class="btn-excluir" onclick="removerMissao(${index})">${t.txtAbandonar}</button></div>`;
             listaAtivas.appendChild(li);
         } else {
-            li.innerHTML = `
-                <div class="missao-info">
-                    <span class="missao-titulo">${missao.texto}</span>
-                    <span class="missao-rank">${t.txtPergaminhoFechado}</span>
-                </div>
-                <button class="btn-excluir" onclick="removerMissao(${index})">${t.txtLimpar}</button>
-            `;
+            li.innerHTML = `<div class="missao-info"><span class="missao-titulo">${missao.texto}</span><span class="missao-rank">${t.txtPergaminhoFechado}</span></div><button class="btn-excluir" onclick="removerMissao(${index})">${t.txtLimpar}</button>`;
             listaConcluidas.appendChild(li);
         }
     });
-    
     localStorage.setItem('guildaMissoes', JSON.stringify(missoes));
 }
-
 function adicionarMissao() {
-    const input = document.getElementById('inputMissao');
-    const selectRank = document.getElementById('selectRank');
-    const selectTipo = document.getElementById('selectTipo').value;
-    
+    const input = document.getElementById('inputMissao'); const selectRank = document.getElementById('selectRank'); const selectTipo = document.getElementById('selectTipo').value;
     if (input.value.trim() === '') return;
-    
-    let tempoBase = 0;
-    if (selectTipo === 'curto') tempoBase = 15 * 60;
-    if (selectTipo === 'longo') tempoBase = 45 * 60;
-    
-    missoes.push({
-        texto: input.value, rank: selectRank.value, tipo: selectTipo,
-        tempoTotal: tempoBase, tempoRestante: tempoBase, rodando: false,
-        progresso: 0, concluida: false
-    });
-    
+    let tempoBase = 0; if (selectTipo === 'curto') tempoBase = 15 * 60; if (selectTipo === 'longo') tempoBase = 45 * 60;
+    missoes.push({ texto: input.value, rank: selectRank.value, tipo: selectTipo, tempoTotal: tempoBase, tempoRestante: tempoBase, rodando: false, progresso: 0, concluida: false });
     input.value = ''; renderizarMissoes();
 }
-
 function removerMissao(index) { missoes.splice(index, 1); renderizarMissoes(); }
-
 function checarTitulos(missao) {
-    let ganhouNovo = false;
-
-    estatisticas.totalCompletas++;
+    let ganhouNovo = false; estatisticas.totalCompletas++;
     if (estatisticas.totalCompletas === 3) ganhouNovo = desbloquearTitulo('t_ini') || ganhouNovo;
     if (estatisticas.totalCompletas === 10) ganhouNovo = desbloquearTitulo('t_vet') || ganhouNovo;
-
-    if (missao.tipo === 'curto' || missao.tipo === 'longo') {
-        let metadeTempo = missao.tempoTotal / 2;
-        if (missao.tempoRestante >= metadeTempo) ganhouNovo = desbloquearTitulo('t_speed') || ganhouNovo;
-        if (missao.tempoRestante <= 10 && missao.tempoRestante > 0) ganhouNovo = desbloquearTitulo('t_clutch') || ganhouNovo;
-    }
-
+    if (missao.tipo === 'curto' || missao.tipo === 'longo') { let metadeTempo = missao.tempoTotal / 2; if (missao.tempoRestante >= metadeTempo) ganhouNovo = desbloquearTitulo('t_speed') || ganhouNovo; if (missao.tempoRestante <= 10 && missao.tempoRestante > 0) ganhouNovo = desbloquearTitulo('t_clutch') || ganhouNovo; }
     if (missao.tipo === 'epica' && missao.progresso === 100) ganhouNovo = desbloquearTitulo('t_epic') || ganhouNovo;
-
     localStorage.setItem('guildaStats', JSON.stringify(estatisticas));
-    
-    if (!ganhouNovo) { darXP(missao.rank); } 
-    else { xpAtual += recompensas[missao.rank]; checarLevelUpSilencioso(); }
+    if (!ganhouNovo) { darXP(missao.rank); } else { xpAtual += recompensas[missao.rank]; checarLevelUpSilencioso(); }
 }
-
 function desbloquearTitulo(id) {
     if (!titulosDesbloqueados.includes(id)) {
-        const t = dicionario[idioma].titulos;
-        titulosDesbloqueados.push(id); localStorage.setItem('guildaTitulos', JSON.stringify(titulosDesbloqueados));
-        document.getElementById('nomeTituloModal').innerText = `${t[id].icone} ${t[id].nome}`;
-        document.getElementById('descTituloModal').innerText = t[id].desc;
-        setTimeout(() => {
-            tocarSomTitulo(); document.getElementById('modalTitulo').classList.remove('escondido'); renderizarTitulos();
-        }, 500);
-        return true;
-    }
-    return false;
+        const t = dicionario[idioma].titulos; titulosDesbloqueados.push(id); localStorage.setItem('guildaTitulos', JSON.stringify(titulosDesbloqueados));
+        document.getElementById('nomeTituloModal').innerText = `${t[id].icone} ${t[id].nome}`; document.getElementById('descTituloModal').innerText = t[id].desc;
+        setTimeout(() => { tocarSomTitulo(); document.getElementById('modalTitulo').classList.remove('escondido'); renderizarTitulos(); }, 500); return true;
+    } return false;
 }
-
-function checarLevelUpSilencioso() {
-    if (xpAtual >= xpPorNivel) {
-        let sobras = xpAtual - xpPorNivel; nivelAtual++; xpAtual = sobras;
-        setTimeout(() => { mostrarModalLevelUp(); }, 3000); 
-    }
-    atualizarStatus();
-}
-
-function darXP(rank) {
-    tocarSomMoeda(); xpAtual += recompensas[rank];
-    if (xpAtual >= xpPorNivel) {
-        let sobras = xpAtual - xpPorNivel; nivelAtual++; xpAtual = sobras;
-        mostrarModalLevelUp();
-    }
-    atualizarStatus();
-}
-
-function concluirTarefa(index) {
-    const missao = missoes[index]; missao.rodando = false; missao.concluida = true;
-    checarTitulos(missao); renderizarMissoes();
-}
-
-function avancarEpica(index) {
-    missoes[index].progresso += 10;
-    if (missoes[index].progresso >= 100) { missoes[index].progresso = 100; concluirTarefa(index); } 
-    else { renderizarMissoes(); }
-}
-
+function checarLevelUpSilencioso() { if (xpAtual >= xpPorNivel) { let sobras = xpAtual - xpPorNivel; nivelAtual++; xpAtual = sobras; setTimeout(() => { mostrarModalLevelUp(); }, 3000); } atualizarStatus(); }
+function darXP(rank) { tocarSomMoeda(); xpAtual += recompensas[rank]; if (xpAtual >= xpPorNivel) { let sobras = xpAtual - xpPorNivel; nivelAtual++; xpAtual = sobras; mostrarModalLevelUp(); } atualizarStatus(); }
+function concluirTarefa(index) { const missao = missoes[index]; missao.rodando = false; missao.concluida = true; checarTitulos(missao); renderizarMissoes(); }
+function avancarEpica(index) { missoes[index].progresso += 10; if (missoes[index].progresso >= 100) { missoes[index].progresso = 100; concluirTarefa(index); } else { renderizarMissoes(); } }
 function alternarTimer(index) { missoes[index].rodando = !missoes[index].rodando; renderizarMissoes(); }
-
 setInterval(() => {
     let precisaSalvar = false;
     missoes.forEach((m, i) => {
         if ((m.tipo === 'curto' || m.tipo === 'longo') && m.rodando && !m.concluida && m.tempoRestante > 0) {
-            m.tempoRestante--; precisaSalvar = true;
-            const spanTempo = document.getElementById(`timer-${i}`);
-            if(spanTempo) spanTempo.innerText = formatarTempo(m.tempoRestante);
-            if (m.tempoRestante <= 0) {
-                m.rodando = false; tocarSomAlarme();
-                const msg = dicionario[idioma].alertaEsgotado.replace('{0}', m.texto);
-                alert(msg); renderizarMissoes(); 
-            }
+            m.tempoRestante--; precisaSalvar = true; const spanTempo = document.getElementById(`timer-${i}`); if(spanTempo) spanTempo.innerText = formatarTempo(m.tempoRestante);
+            if (m.tempoRestante <= 0) { m.rodando = false; tocarSomAlarme(); const msg = dicionario[idioma].alertaEsgotado.replace('{0}', m.texto); alert(msg); renderizarMissoes(); }
         }
-    });
-    if (precisaSalvar) localStorage.setItem('guildaMissoes', JSON.stringify(missoes));
+    }); if (precisaSalvar) localStorage.setItem('guildaMissoes', JSON.stringify(missoes));
 }, 1000);
 
 function mostrarModalLevelUp() { document.getElementById('nivelModal').innerText = nivelAtual; document.getElementById('modalLevelUp').classList.remove('escondido'); tocarSomLevelUp(); }
 function fecharModal(idModal) { document.getElementById(idModal).classList.add('escondido'); }
-
-// --- O BAÚ INTELIGENTE ---
 function abrirModalDoacao() { 
-    const caixaPix = document.getElementById('conteudoPix');
-    const caixaInter = document.getElementById('conteudoInternacional');
-    const modalBox = document.querySelector('.caixa-pix'); 
-
-    if (idioma === 'pt') {
-        caixaPix.classList.remove('escondido');
-        caixaInter.classList.add('escondido');
-        modalBox.classList.remove('caixa-internacional'); 
-    } else {
-        caixaPix.classList.add('escondido');
-        caixaInter.classList.remove('escondido');
-        modalBox.classList.add('caixa-internacional'); 
-    }
+    const caixaPix = document.getElementById('conteudoPix'); const caixaInter = document.getElementById('conteudoInternacional'); const modalBox = document.querySelector('.caixa-pix'); 
+    if (idioma === 'pt') { caixaPix.classList.remove('escondido'); caixaInter.classList.add('escondido'); modalBox.classList.remove('caixa-internacional'); } else { caixaPix.classList.add('escondido'); caixaInter.classList.remove('escondido'); modalBox.classList.add('caixa-internacional'); }
     document.getElementById('modalDoacao').classList.remove('escondido'); 
 }
-
 function copiarChavePix() {
-    const chave = document.getElementById('inputChavePix').value;
-    const botao = document.getElementById('btnCopiarPix');
-    const msgOriginal = dicionario[idioma].btnCopiarPix;
-    const msgCopiado = dicionario[idioma].copiadoSucesso;
-    
-    navigator.clipboard.writeText(chave).then(() => {
-        botao.innerText = msgCopiado; botao.style.backgroundColor = "var(--borda-metal)"; 
-        setTimeout(() => { botao.innerText = msgOriginal; botao.style.backgroundColor = ""; }, 2000);
-    });
+    const chave = document.getElementById('inputChavePix').value; const botao = document.getElementById('btnCopiarPix'); const msgOriginal = dicionario[idioma].btnCopiarPix; const msgCopiado = dicionario[idioma].copiadoSucesso;
+    navigator.clipboard.writeText(chave).then(() => { botao.innerText = msgCopiado; botao.style.backgroundColor = "var(--borda-metal)"; setTimeout(() => { botao.innerText = msgOriginal; botao.style.backgroundColor = ""; }, 2000); });
 }
 
-// Inicia
 aplicarTraducoes(); checarVitrine(); atualizarStatus(); renderizarMissoes(); renderizarTitulos(); 
 document.getElementById('inputMissao').addEventListener('keypress', function (e) { if (e.key === 'Enter') adicionarMissao(); });
